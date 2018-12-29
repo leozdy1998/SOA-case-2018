@@ -1,0 +1,98 @@
+---
+title: "R Notebook"
+output:
+  word_document: default
+  html_notebook: default
+---
+```{r}
+library("Sleuth3")
+library("tidyverse")
+library("ggrepel")
+library("gmodels")
+library("broom")
+library(readxl)
+data<- read_excel("C:/Users/leozd/Desktop/SOA case/final one/data collection.xlsx",sheet = "death rate collection")
+
+```
+
+```{r}
+
+```
+
+```{r}
+male<-data[data$gender=="male",]
+
+summary(lm(log(rate)~age+year,data = male))
+malenew<-male[male$age!=110,]
+malenew
+summary(lm(log(rate)~age+year,data = malenew))
+malenew1<-malenew[malenew$age!=0,]
+malenew1
+summary(lm(log(rate)~age+year,data = malenew1))
+summary(lm(log(rate)~age+year+I(age^2)+I(age^3)+I(age^4)+I(age^5)+I(age^6)+I(age^7)+I(age^8),data = malenew1))
+a<-lm(log(rate)~age+year+I(age^2)+I(age^3)+I(age^4)+I(age^5)+I(age^6)+I(age^7)+I(age^8),data = malenew1)
+a
+age<-seq(1,109,1)
+m<-data.frame(age)
+m
+for(i in 2017:2028)
+{
+  newdata<-data.frame(age=c(seq(1,109,1)),year=i)
+   m<-data.frame(m,exp(predict(a,newdata)))
+}
+  
+m<-as.tibble(m)
+m0<-data.frame()
+write.csv(m,file="C:/Users/leozd/Desktop/SOA case/final one/maleresult.csv")
+male0<-male[male$age==0,]
+summary(lm(log(rate)~year,data = male0))
+a1<-lm(log(rate)~year+year^2,data = male0)
+newdata<-data.frame(year=c(seq(2017,2028,1)))
+newdata
+m0<-data.frame(exp(predict(a1,newdata)))
+m0
+write.csv(m0,file="C:/Users/leozd/Desktop/SOA case/final one/maleresult 0 years.csv")
+
+
+```
+
+```{r}
+female<-data[data$gender=="female",]
+
+summary(lm(log(rate)~age+year,data = female))
+femalenew<-female[female$age!=110,]
+femalenew
+summary(lm(log(rate)~age+year,data = femalenew))
+femalenew1<-femalenew[femalenew$age!=0,]
+femalenew1
+summary(lm(log(rate)~age+year,data = femalenew1))
+summary(lm(log(rate)~age+year+I(age^2)+I(age^3)+I(age^4)+I(age^5)+I(age^6)+I(age^7)+I(age^8)+I(age^9),data = femalenew1))
+b<-lm(log(rate)~age+year+I(age^2)+I(age^3)+I(age^4)+I(age^5)+I(age^6)+I(age^7)+I(age^8)+I(age^9),data = femalenew1)
+b
+
+
+age<-seq(1,109,1)
+f<-data.frame(age)
+f
+for(i in 2017:2028)
+{
+  newdata<-data.frame(age=c(seq(1,109,1)),year=i)
+   f<-data.frame(f,exp(predict(b,newdata)))
+}
+  
+f<-as.tibble(m)
+f
+write.csv(f,file="C:/Users/leozd/Desktop/SOA case/final one/femaleresult.csv")
+
+female0<-female[female$age==0,]
+summary(lm(log(rate)~year+I(year^2),data = female0))
+b1<-lm(log(rate)~year+I(year^2),data = female0)
+m1<-data.frame(exp(predict(b1,newdata)))
+m1
+write.csv(m1,file="C:/Users/leozd/Desktop/SOA case/final one/female 0 years.csv")
+
+```
+
+
+
+
