@@ -1,2 +1,3 @@
 # SOA-case-2018
-This is the final report of the SOA case competition 
+final report of the 2018 Society of Actuaries Student Research Case Study Challenge. 
+https://www.soa.org/research/opportunities/2018-student-case-study/
